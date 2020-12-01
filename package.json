@@ -1,0 +1,16 @@
+{
+  "name": "routing",
+  "description": "Routing module for Cheesecake",
+  "type": "module",
+  "require": {
+    "php": ">=7.4.0"
+  },
+  "license": "apache 2.0",
+  "authors": [
+    {
+      "name": "Christian Meyer",
+      "email": "ak56Lk@gmx.net"
+    }
+  ],
+  "minimum-stability": "dev"
+}
