@@ -1,5 +1,5 @@
 {
-  "name": "routing",
+  "name": "cheesecake/routing",
   "description": "Routing module for Cheesecake",
   "type": "module",
   "require": {
