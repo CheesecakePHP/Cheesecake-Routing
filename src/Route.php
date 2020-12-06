@@ -41,6 +41,8 @@ class Route implements RouteInterface
      */
     private array $options = [];
 
+    private array $rules = [];
+
     /**
      * A route and an action will be needed to instantiate
      * the Route object.
@@ -123,7 +125,7 @@ class Route implements RouteInterface
      * @param string $uri The URI represents the called endpoint
      * @return bool TRUE if the URI matches the route otherwise FALSE
      */
-    public function match(string $uri)
+    public function try(string $uri)
     {
         $uri = trim($uri, '/');
         $route = preg_replace('~\{(\w+)\}~', '(\w+)', $this->route);
@@ -136,12 +138,28 @@ class Route implements RouteInterface
             $data = [];
 
             foreach ($placeholders[1] as $k => $placeholder) {
-                $data[$placeholder] = $matches[0][($k+1)];
+                if(isset($this->rules[$placeholder])) {
+                    if(!preg_match($this->rules[$placeholder], $matches[0][($k + 1)])) {
+                        $matched = false;
+                        break;
+                    }
+                }
+
+                $data[$placeholder] = $matches[0][($k + 1)];
             }
 
             $this->setData($data);
         }
 
         return $matched;
+    }
+
+    /**
+     * @param string $rule
+     */
+    public function match(array $rules)
+    {
+        $this->rules = $rules;
+        return $this;
     }
 }
