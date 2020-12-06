@@ -2,11 +2,11 @@
 
 
 use App\Components\Path\Controller;
-use Cheesecake\Exception\ControllerNotExistsException;
-use Cheesecake\Exception\MalformedActionException;
-use Cheesecake\Exception\MethodNotExistsException;
-use Cheesecake\Exception\RouteIsEmptyException;
-use Cheesecake\Exception\RouteNotDefinedException;
+use Cheesecake\Routing\Exception\ControllerNotExistsException;
+use Cheesecake\Routing\Exception\MalformedActionException;
+use Cheesecake\Routing\Exception\MethodNotExistsException;
+use Cheesecake\Routing\Exception\RouteIsEmptyException;
+use Cheesecake\Routing\Exception\RouteNotDefinedException;
 use Cheesecake\Routing\Router;
 use PHPUnit\Framework\TestCase;
 
@@ -21,6 +21,14 @@ class RouterTest extends TestCase
     {
         parent::setUp();
 
+        require_once('../src/Router.php');
+        require_once('../src/RouteInterface.php');
+        require_once('../src/Route.php');
+        require_once('../src/Exception/ControllerNotExistsException.php');
+        require_once('../src/Exception/MethodNotExistsException.php');
+        require_once('../src/Exception/MalformedActionException.php');
+        require_once('../src/Exception/RouteIsEmptyException.php');
+        require_once('../src/Exception/RouteNotDefinedException.php');
         require_once('mocks/PathController.php');
         require_once('mocks/FooMiddleware.php');
 
@@ -206,6 +214,24 @@ class RouterTest extends TestCase
         self::assertEquals('foo', ($PutRoute->getOptions())['middleware']);
         self::assertEquals('foo', ($PatchRoute->getOptions())['middleware']);
         self::assertEquals('foo', ($DeleteRoute->getOptions())['middleware']);
+    }
+
+    public function testCanParameterMatchRules()
+    {
+        Router::get('path/to/{id}', 'Path@To')->match([ 'id' => '([0-9]+)' ]);
+
+        $route = Router::route('GET', '/path/to/1');
+
+        self::assertNotFalse($route);
+    }
+
+    public function testCanNotParameterMatchRules()
+    {
+        self::expectException(RouteNotDefinedException::class);
+
+        Router::get('path/to/{id}', 'Path@To')->match([ 'id' => '([0-9]+)' ]);
+
+        $route = Router::route('GET', '/path/to/username');
     }
 
 }

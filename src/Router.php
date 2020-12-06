@@ -2,11 +2,11 @@
 
 namespace Cheesecake\Routing;
 
-use Cheesecake\Exception\ControllerNotExistsException;
-use Cheesecake\Exception\MalformedActionException;
-use Cheesecake\Exception\MethodNotExistsException;
-use Cheesecake\Exception\RouteIsEmptyException;
-use Cheesecake\Exception\RouteNotDefinedException;
+use Cheesecake\Routing\Exception\ControllerNotExistsException;
+use Cheesecake\Routing\Exception\MalformedActionException;
+use Cheesecake\Routing\Exception\MethodNotExistsException;
+use Cheesecake\Routing\Exception\RouteIsEmptyException;
+use Cheesecake\Routing\Exception\RouteNotDefinedException;
 
 /**
  * The Router registers the routes for each HTTP verb (GET, POST, PUT, PATCH & DELETE).
