@@ -84,7 +84,7 @@ class Router
             $MatchedRoute = null;
 
             foreach(self::$routes[strtoupper($name)] as $Route) {
-                if ($Route->try($route)) {
+                if ($Route->match($route)) {
                     $MatchedRoute = $Route;
                     break;
                 }

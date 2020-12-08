@@ -218,7 +218,7 @@ class RouterTest extends TestCase
 
     public function testCanParameterMatchRules()
     {
-        Router::get('path/to/{id}', 'Path@To')->match([ 'id' => '([0-9]+)' ]);
+        Router::get('path/to/{id}', 'Path@To')->where([ 'id' => '([0-9]+)' ]);
 
         $route = Router::route('GET', '/path/to/1');
 
@@ -229,7 +229,7 @@ class RouterTest extends TestCase
     {
         self::expectException(RouteNotDefinedException::class);
 
-        Router::get('path/to/{id}', 'Path@To')->match([ 'id' => '([0-9]+)' ]);
+        Router::get('path/to/{id}', 'Path@To')->where([ 'id' => '([0-9]+)' ]);
 
         $route = Router::route('GET', '/path/to/username');
     }

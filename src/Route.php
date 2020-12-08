@@ -125,7 +125,7 @@ class Route implements RouteInterface
      * @param string $uri The URI represents the called endpoint
      * @return bool TRUE if the URI matches the route otherwise FALSE
      */
-    public function try(string $uri)
+    public function match(string $uri)
     {
         $uri = trim($uri, '/');
         $route = preg_replace('~\{(\w+)\}~', '(\w+)', $this->route);
@@ -157,9 +157,37 @@ class Route implements RouteInterface
     /**
      * @param string $rule
      */
-    public function match(array $rules)
+    public function where(array $rules)
     {
         $this->rules = $rules;
         return $this;
     }
+
+    public function whereNumber(string $key)
+    {
+        $this->where([
+            $key => '([0-9]+)'
+        ]);
+
+        return $this;
+    }
+
+    public function whereAlpha(string $key)
+    {
+        $this->where([
+            $key => '([^0-9]+)'
+        ]);
+
+        return $this;
+    }
+
+    public function whereAlphaNumeric(string $key)
+    {
+        $this->where([
+            $key => '([\d]+)'
+        ]);
+
+        return $this;
+    }
+
 }
