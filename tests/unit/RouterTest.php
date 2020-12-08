@@ -169,6 +169,7 @@ class RouterTest extends TestCase
             ['put', '/path/to/endpoint'],
             ['patch', '/path/to/endpoint'],
             ['delete', '/path/to/endpoint'],
+            ['any', '/path/to/endpoint']
         ];
     }
 
@@ -183,6 +184,7 @@ class RouterTest extends TestCase
             Router::put('path/to/endpoint', 'Path@To');
             Router::patch('path/to/endpoint', 'Path@To');
             Router::delete('path/to/endpoint', 'Path@To');
+            Router::any('path/to/endpoint', 'Path@To');
         });
 
         $GetRoute = Router::get('v1/path/to/endpoint');
@@ -190,35 +192,40 @@ class RouterTest extends TestCase
         $PutRoute = Router::put('v1/path/to/endpoint');
         $PatchRoute = Router::patch('v1/path/to/endpoint');
         $DeleteRoute = Router::delete('v1/path/to/endpoint');
+        $AnyRoute = Router::any('v1/path/to/endpoint');
 
         self::assertEquals('Path@To', $GetRoute->getAction());
         self::assertEquals('Path@To', $PostRoute->getAction());
         self::assertEquals('Path@To', $PutRoute->getAction());
         self::assertEquals('Path@To', $PatchRoute->getAction());
         self::assertEquals('Path@To', $DeleteRoute->getAction());
+        self::assertEquals('Path@To', $AnyRoute->getAction());
 
         self::assertIsArray($GetRoute->getOptions());
         self::assertIsArray($PostRoute->getOptions());
         self::assertIsArray($PutRoute->getOptions());
         self::assertIsArray($PatchRoute->getOptions());
         self::assertIsArray($DeleteRoute->getOptions());
+        self::assertIsArray($AnyRoute->getOptions());
 
         self::assertArrayHasKey('middleware', $GetRoute->getOptions());
         self::assertArrayHasKey('middleware', $PostRoute->getOptions());
         self::assertArrayHasKey('middleware', $PutRoute->getOptions());
         self::assertArrayHasKey('middleware', $PatchRoute->getOptions());
         self::assertArrayHasKey('middleware', $DeleteRoute->getOptions());
+        self::assertArrayHasKey('middleware', $AnyRoute->getOptions());
 
         self::assertEquals('foo', ($GetRoute->getOptions())['middleware']);
         self::assertEquals('foo', ($PostRoute->getOptions())['middleware']);
         self::assertEquals('foo', ($PutRoute->getOptions())['middleware']);
         self::assertEquals('foo', ($PatchRoute->getOptions())['middleware']);
         self::assertEquals('foo', ($DeleteRoute->getOptions())['middleware']);
+        self::assertEquals('foo', ($AnyRoute->getOptions())['middleware']);
     }
 
     public function testCanParameterMatchRules()
     {
-        Router::get('path/to/{id}', 'Path@To')->match([ 'id' => '([0-9]+)' ]);
+        Router::get('path/to/{id}', 'Path@To')->where([ 'id' => '([0-9]+)' ]);
 
         $route = Router::route('GET', '/path/to/1');
 
@@ -229,7 +236,7 @@ class RouterTest extends TestCase
     {
         self::expectException(RouteNotDefinedException::class);
 
-        Router::get('path/to/{id}', 'Path@To')->match([ 'id' => '([0-9]+)' ]);
+        Router::get('path/to/{id}', 'Path@To')->where([ 'id' => '([0-9]+)' ]);
 
         $route = Router::route('GET', '/path/to/username');
     }

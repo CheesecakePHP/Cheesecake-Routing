@@ -23,6 +23,7 @@ use Cheesecake\Routing\Exception\RouteNotDefinedException;
  * @method static \Cheesecake\Routing\Route|void put(string $route, string $action = null, array $options = [])
  * @method static \Cheesecake\Routing\Route|void patch(string $route, string $action = null, array $options = [])
  * @method static \Cheesecake\Routing\Route|void delete(string $route, string $action = null, array $options = [])
+ * @method static \Cheesecake\Routing\Route|void any(string $route, string $action = null, array $options = [])
  */
 class Router
 {
@@ -37,7 +38,8 @@ class Router
         'POST' => [],
         'PUT' => [],
         'PATCH' => [],
-        'DELETE' => []
+        'DELETE' => [],
+        'ANY' => []
     ];
 
     /**
@@ -84,7 +86,7 @@ class Router
             $MatchedRoute = null;
 
             foreach(self::$routes[strtoupper($name)] as $Route) {
-                if ($Route->try($route)) {
+                if ($Route->match($route)) {
                     $MatchedRoute = $Route;
                     break;
                 }
@@ -162,6 +164,7 @@ class Router
             case 'PUT': $Route = self::put($route); break;
             case 'PATCH': $Route = self::patch($route); break;
             case 'DELETE': $Route = self::delete($route); break;
+            default: $Route = self::any($route); break;
         }
 
         $middlewares = $Route->getOptions('middleware');
