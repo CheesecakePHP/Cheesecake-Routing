@@ -31,6 +31,8 @@ class RouterTest extends TestCase
         require_once('../src/Exception/RouteNotDefinedException.php');
         require_once('mocks/PathController.php');
         require_once('mocks/FooMiddleware.php');
+        require_once('mocks/ValidatorInterface.php');
+        require_once('mocks/NumberValidator.php');
 
         $this->Mocks = new \stdClass();
 
@@ -49,8 +51,8 @@ class RouterTest extends TestCase
      */
     public function testCanAddRoute($httpVerb, $route)
     {
-        Router::$httpVerb('path/to/endpoint', 'Path@To', ['middleware' => get_class($this->Mocks->FooMiddleware)]);
-        $Route = Router::$httpVerb('path/to/endpoint');
+        Router::$httpVerb($route, 'Path@To', ['middleware' => get_class($this->Mocks->FooMiddleware)]);
+        $Route = Router::$httpVerb($route);
 
         $routeOptions = $Route->getOptions();
 
@@ -239,6 +241,28 @@ class RouterTest extends TestCase
         Router::get('path/to/{id}', 'Path@To')->where([ 'id' => '([0-9]+)' ]);
 
         $route = Router::route('GET', '/path/to/username');
+    }
+
+    public function testWhereWithValidator()
+    {
+        Router::get('path/to/{id}', 'Path@To')->where([
+            'id' => \Cheesecake\Validator\Number::class
+        ]);
+
+        $route = Router::route('GET', '/path/to/1');
+
+        self::assertNotFalse($route);
+    }
+
+    public function testWhereWithValidatorFailed()
+    {
+        self::expectException(RouteNotDefinedException::class);
+
+        Router::get('path/to/{id}', 'Path@To')->where([
+            'id' => \Cheesecake\Validator\Number::class
+        ]);
+
+        $route = Router::route('GET', '/path/to/one');
     }
 
 }

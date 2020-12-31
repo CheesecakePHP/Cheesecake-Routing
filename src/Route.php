@@ -3,6 +3,7 @@
 
 namespace Cheesecake\Routing;
 
+
 /**
  * The Route represents a single route and their settings and options.
  * Each route will be resolved to an action which will separate the
@@ -139,7 +140,15 @@ class Route implements RouteInterface
 
             foreach ($placeholders[1] as $k => $placeholder) {
                 if(isset($this->rules[$placeholder])) {
-                    if(!preg_match($this->rules[$placeholder], $matches[0][($k + 1)])) {
+                    if(class_exists($this->rules[$placeholder])) {
+                        if(method_exists($this->rules[$placeholder], 'validate')) {
+                            if (!$this->rules[$placeholder]::validate($matches[0][($k + 1)])) {
+                                $matched = false;
+                                break;
+                            }
+                        }
+                    }
+                    elseif(!preg_match($this->rules[$placeholder], $matches[0][($k + 1)])) {
                         $matched = false;
                         break;
                     }
@@ -155,7 +164,7 @@ class Route implements RouteInterface
     }
 
     /**
-     * @param string $rule
+     * @param array $rules
      */
     public function where(array $rules)
     {
@@ -188,6 +197,11 @@ class Route implements RouteInterface
         ]);
 
         return $this;
+    }
+
+    public static function test()
+    {
+        var_dump("TEST");
     }
 
 }
