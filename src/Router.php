@@ -60,7 +60,7 @@ class Router
 
     public static function loadRoutes()
     {
-        $dir = new DirectoryIterator('src/routes/');
+        $dir = new \DirectoryIterator('src/routes/');
 
         foreach ($dir as $fileinfo) {
             if (!$fileinfo->isDot()) {
