@@ -199,9 +199,4 @@ class Route implements RouteInterface
         return $this;
     }
 
-    public static function test()
-    {
-        var_dump("TEST");
-    }
-
 }

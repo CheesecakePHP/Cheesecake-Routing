@@ -33,6 +33,7 @@ class RouterTest extends TestCase
         require_once('mocks/FooMiddleware.php');
         require_once('mocks/ValidatorInterface.php');
         require_once('mocks/NumberValidator.php');
+        require_once('mocks/Error_404.php');
 
         $this->Mocks = new \stdClass();
 
