@@ -58,12 +58,25 @@ class Router
      */
     private static array $routeOptions = [];
 
+    public static function loadRoutes()
+    {
+        $dir = new DirectoryIterator('src/routes/');
+
+        foreach ($dir as $fileinfo) {
+            if (!$fileinfo->isDot()) {
+                $path = $fileinfo->getPathname();
+
+                include_once($path);
+            }
+        }
+    }
+
     /**
      * The arguments are:
      * <pre>
      * 0: route
      * 1: action
-     * 3: options
+     * 2: options
      * </pre>
      *
      * If argument 1 is null then it will try to match a registered route.
