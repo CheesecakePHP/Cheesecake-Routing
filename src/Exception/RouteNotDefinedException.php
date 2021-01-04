@@ -14,7 +14,7 @@ class RouteNotDefinedException extends Error_404
      */
     public function __construct(string $message)
     {
-        parent::__construct('Route "'. $message .'" not defined');
+        throw new Error_404('Route "'. $message .'" not defined');
     }
 
 }
