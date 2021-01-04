@@ -4,7 +4,9 @@
 namespace Cheesecake\Routing\Exception;
 
 
-class RouteNotDefinedException extends \Exception
+use Cheesecake\Http\Exception\Error_404;
+
+class RouteNotDefinedException extends Error_404
 {
 
     /**
